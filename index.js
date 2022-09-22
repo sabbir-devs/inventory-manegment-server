@@ -14,13 +14,6 @@ app.use(cors());
 const productRoute = require("./routes/product.route");
 
 
-
-
-
-
-
-
-
 app.get("/", (req, res) => {
   res.send("Hello from server");
 });
