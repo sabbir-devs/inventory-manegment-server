@@ -2,8 +2,10 @@ const Product = require("../models/Product");
 const {
   getProductService,
   createProductService,
+  updateProductService,
 } = require("../services/product.services");
 
+// get all product
 exports.getProducts = async (req, res, next) => {
   try {
     const products = await getProductService();
@@ -20,6 +22,7 @@ exports.getProducts = async (req, res, next) => {
   }
 };
 
+// create a new product
 exports.createProduct = async (req, res, next) => {
   try {
     // save or create
@@ -40,7 +43,43 @@ exports.createProduct = async (req, res, next) => {
   }
 };
 
+// find one product by id and modify
+// get a product
+exports.getSingleProdeuct = async(req, res, next) => {
+  try {
+    const product = await Product.findOne({});
+    res.status(200).json({
+      status: "success",
+      message:"product get successfuly",
+      data: product
+    })
+  } catch (error) {
+    res.status(400).json({
+      status:'fail',
+      message:"can't get product",
+      error: error.message
+    })
+  }
+}
 
+// update one product
+exports.updateProduct = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await updateProductService(id, req.body)
+    res.status(200).json({
+      status: 'success',
+      message: "product update Successfuly!",
+      data: result
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: "could'n update product",
+      error: error.message
+    })
+  }
+}
 
 
 
