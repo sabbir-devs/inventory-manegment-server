@@ -6,9 +6,13 @@ router.route('/')
     .get(productController.getProducts)
     .post(productController.createProduct)
 
+
+router.route('/bulk-update').patch(productController.bulkUpdateProduct)
+
+// allways we will put dynamic route bottom side of our page
 router.route('/:id')
     .get(productController.getSingleProdeuct)
-    .patch(productController.updateProduct)
-
+    .patch(productController.updateProductById)
+    .delete(productController.deleteProductById)
 
 module.exports = router

@@ -3,6 +3,9 @@ const {
   getProductService,
   createProductService,
   updateProductService,
+  getSingleProductService,
+  bulkUpdateProductService,
+  deleteProductService,
 } = require("../services/product.services");
 
 // get all product
@@ -45,25 +48,26 @@ exports.createProduct = async (req, res, next) => {
 
 // find one product by id and modify
 // get a product
-exports.getSingleProdeuct = async(req, res, next) => {
+exports.getSingleProdeuct = async (req, res, next) => {
   try {
-    const product = await Product.findOne({});
+    const { id } = req.params;
+    const product = await getSingleProductService(id);
     res.status(200).json({
       status: "success",
-      message:"product get successfuly",
+      message: "product get successfuly",
       data: product
     })
   } catch (error) {
     res.status(400).json({
-      status:'fail',
-      message:"can't get product",
+      status: 'fail',
+      message: "can't get product",
       error: error.message
     })
   }
 }
 
 // update one product
-exports.updateProduct = async (req, res, next) => {
+exports.updateProductById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await updateProductService(id, req.body)
@@ -81,7 +85,41 @@ exports.updateProduct = async (req, res, next) => {
   }
 }
 
+// delete one product 
+exports.deleteProductById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await deleteProductService(id);
+    res.status(200).json({
+      status: "success",
+      message: "product delete successful",
+      data: result
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: "could't delete the product",
+      error: error.message
+    })
+  }
+}
 
+// buld update
+exports.bulkUpdateProduct = async (req, res, next) => {
+  try {
+    const product = await bulkUpdateProductService(req.body);
+    res.status(200).json({
+      status: 'success',
+      message: "product update successfuly!",
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      message: "could'n update product",
+      error: error.message
+    })
+  }
+}
 
 
 
