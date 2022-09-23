@@ -4,8 +4,9 @@ const {
   createProductService,
   updateProductService,
   getSingleProductService,
-  bulkUpdateProductService,
   deleteProductService,
+  deleteBulkProductService,
+  updateBulkProductService,
 } = require("../services/product.services");
 
 // get all product
@@ -89,7 +90,20 @@ exports.updateProductById = async (req, res, next) => {
 exports.deleteProductById = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const findProduct = await Product.findOne({_id: id});
+    if(!findProduct){
+      return res.status(400).json({
+        status: "fail",
+        error:"The product Id is not exist to database!"
+      })
+    }
     const result = await deleteProductService(id);
+    if(!result.deletedCount){
+      return res.status(400).json({
+        status:"fail",
+        error:"couldn't finde the product"
+      })
+    }
     res.status(200).json({
       status: "success",
       message: "product delete successful",
@@ -104,10 +118,10 @@ exports.deleteProductById = async (req, res, next) => {
   }
 }
 
-// buld update
+// bulk update
 exports.bulkUpdateProduct = async (req, res, next) => {
   try {
-    const product = await bulkUpdateProductService(req.body);
+    const product = await updateBulkProductService(req.body);
     res.status(200).json({
       status: 'success',
       message: "product update successfuly!",
@@ -115,12 +129,35 @@ exports.bulkUpdateProduct = async (req, res, next) => {
   } catch (error) {
     res.status(400).json({
       status: 'fail',
-      message: "could'n update product",
+      message: "couldn't update product",
       error: error.message
     })
   }
 }
 
+// bulk delete product
+exports.bulkDeleteProduct = async (req, res, next) => {
+  try {
+    const result = await deleteBulkProductService(req.body.ids);
+    if(!result.deletedCount){
+      return res.status(400).json({
+        status:"fail",
+        error:"couldn't finde the product"
+      })
+    }
+    res.status(200).json({
+      status:"success!",
+      message:"givn product delete successful!",
+      data: result
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: "couldn't delete product",
+      error: error.message
+    })
+  }
+}
 
 
 

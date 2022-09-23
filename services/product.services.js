@@ -29,12 +29,12 @@ exports.updateProductService = async (productId, data) => {
 }
 
 // delete a product
-exports.deleteProductService = async(id) => {
-    const result = await Product.deleteOne({_id: id});
+exports.deleteProductService = async (id) => {
+    const result = await Product.deleteOne({ _id: id });
     return result;
 }
 
-exports.bulkUpdateProductService = async (data) => {
+exports.updateBulkProductService = async (data) => {
     // one data update for all product
     // const result = await Product.updateMany({ _id: data.ids }, data.data, {
     //     runValidators: true
@@ -43,8 +43,13 @@ exports.bulkUpdateProductService = async (data) => {
     // muntyple data update different value all product
     let products = [];
     data.ids.forEach(product => {
-        products.push(Product.updateOne({_id: product.id}, product.data));        
+        products.push(Product.updateOne({ _id: product.id }, product.data));
     });
     const result = await Promise.all(products);
+    return result;
+}
+
+exports.deleteBulkProductService = async (ids) => {
+    const result = await Product.deleteMany({ _id: ids });
     return result;
 }
