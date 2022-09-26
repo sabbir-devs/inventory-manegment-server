@@ -22,7 +22,7 @@ exports.getProducts = async (req, res, next) => {
 
     // gt, lt, gte, lte
     let filtersString = JSON.stringify(filters);
-    filtersString = filtersString.replace(/\b(gt|gte|lt|lte)\b/g , match => `$${match}`);
+    filtersString = filtersString.replace(/\b(gt|gte|lt|lte)\b/g, match => `$${match}`);
     filters = JSON.parse(filtersString);
 
     const querys = {};
@@ -36,10 +36,12 @@ exports.getProducts = async (req, res, next) => {
       const fields = req.query.fields.split(',').join(' ');
       querys.fields = fields;
     }
-
-    if (req.query.limit) {
-      const limit = req.query.limit;
-      querys.limit = limit
+    
+    if (req.query.page) {
+      const { page = 1, limit = 10 } = req.query;
+      const skip = (parseInt(page) - 1) * parseInt(limit);
+      querys.skip = skip;
+      querys.limit = parseInt(limit);
     }
 
     const products = await getProductService(filters, querys);
