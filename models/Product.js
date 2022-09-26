@@ -77,7 +77,7 @@ const productSchema = mongoose.Schema({
   timestamps: true
 });
 
-// mongoes middleware for saving data: pre / post
+// mongoose middleware for saving data: pre / post
 productSchema.pre('save', function (next) {
   console.log('before saving data');
   if (this.quantity == 0) {

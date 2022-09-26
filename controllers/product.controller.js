@@ -1,3 +1,4 @@
+const { query } = require("express");
 const Product = require("../models/Product");
 const {
   getProductService,
@@ -12,7 +13,36 @@ const {
 // get all product
 exports.getProducts = async (req, res, next) => {
   try {
-    const products = await getProductService();
+
+    let filters = { ...req.query };
+
+    // sort, page, limit -> exclude
+    const excludeFiles = ['sort', 'page', 'limit'];
+    excludeFiles.forEach(field => delete filters[field]);
+
+    // gt, lt, gte, lte
+    let filtersString = JSON.stringify(filters);
+    filtersString = filtersString.replace(/\b(gt|gte|lt|lte)\b/g , match => `$${match}`);
+    filters = JSON.parse(filtersString);
+
+    const querys = {};
+
+    if (req.query.sort) {
+      let sortBy = req.query.sort.split(',').join(' ');
+      querys.sortBy = sortBy;
+    }
+
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ');
+      querys.fields = fields;
+    }
+
+    if (req.query.limit) {
+      const limit = req.query.limit;
+      querys.limit = limit
+    }
+
+    const products = await getProductService(filters, querys);
     res.status(200).json({
       status: "success",
       data: products,
@@ -90,18 +120,18 @@ exports.updateProductById = async (req, res, next) => {
 exports.deleteProductById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const findProduct = await Product.findOne({_id: id});
-    if(!findProduct){
+    const findProduct = await Product.findOne({ _id: id });
+    if (!findProduct) {
       return res.status(400).json({
         status: "fail",
-        error:"The product Id is not exist to database!"
+        error: "The product Id is not exist to database!"
       })
     }
     const result = await deleteProductService(id);
-    if(!result.deletedCount){
+    if (!result.deletedCount) {
       return res.status(400).json({
-        status:"fail",
-        error:"couldn't finde the product"
+        status: "fail",
+        error: "couldn't finde the product"
       })
     }
     res.status(200).json({
@@ -139,15 +169,15 @@ exports.bulkUpdateProduct = async (req, res, next) => {
 exports.bulkDeleteProduct = async (req, res, next) => {
   try {
     const result = await deleteBulkProductService(req.body.ids);
-    if(!result.deletedCount){
+    if (!result.deletedCount) {
       return res.status(400).json({
-        status:"fail",
-        error:"couldn't finde the product"
+        status: "fail",
+        error: "couldn't finde the product"
       })
     }
     res.status(200).json({
-      status:"success!",
-      message:"givn product delete successful!",
+      status: "success!",
+      message: "givn product delete successful!",
       data: result
     })
   } catch (error) {

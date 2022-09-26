@@ -15,5 +15,5 @@ mongoose.connect(process.env.DATABASE_LOCAL).then(() => {
 const port = process.env.PORT || 8080;
 // server
 app.listen(port, () => {
-    console.log("App is running on port:", port)
-})
+    console.log("App is running on port:", port);
+});
