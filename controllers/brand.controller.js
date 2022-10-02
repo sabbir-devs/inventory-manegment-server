@@ -62,6 +62,12 @@ exports.updateBrandById = async (req, res, next) => {
     const { id } = req.params;
     try {
         const brand = await updateBrandByIdServce(id, req.body);
+        if(!brand.modifiedCount){
+            return res.status(400).json({
+                status:'fail',
+                error:"Couldn't update the product with this id"
+            })
+        }
         res.status(200).json({
             status: 'success!',
             message: "brand update successful",
@@ -75,3 +81,8 @@ exports.updateBrandById = async (req, res, next) => {
         })
     }
 }
+
+
+// left color code: #9e03a3
+// middle color code: #2199ec
+// right color code: #00ffff

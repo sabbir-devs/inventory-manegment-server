@@ -15,6 +15,8 @@ exports.getBrandByIdServce = async (id) => {
     return brand;
 }
 exports.updateBrandByIdServce = async (brandId, data) => {
-    const brand = await Brand.updateOne({ _id: brandId }, { $set: data }, { runValidators: true });
+    const brand = await Brand.updateOne({ _id: brandId }, { $set: data }, {
+        runValidators: true
+    });
     return brand;
 }
