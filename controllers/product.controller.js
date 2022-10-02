@@ -192,7 +192,23 @@ exports.bulkDeleteProduct = async (req, res, next) => {
 }
 
 
-
+// upload file
+exports.fileUploadController = async(req, res, next) => {
+  try {
+    
+    res.status(200).json({
+      status:"success!",
+      message:"file upload successful",
+      data: req.file
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: "fail!",
+      message:"coudn't upload file",
+      error: error.message
+    })
+  }
+}
 
 
 
