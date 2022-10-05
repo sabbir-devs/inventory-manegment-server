@@ -3,7 +3,7 @@ const productController = require('../controllers/product.controller');
 const uploader = require('../middleware/uploader');
 const router = express.Router();
 
-router.post("/file-upload", uploader.single("image"), productController.fileUploadController)
+router.post("/file-upload", uploader.array("image"), productController.fileUploadController)
 
 router.route('/')
     .get(productController.getProducts)

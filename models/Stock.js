@@ -72,7 +72,7 @@ const stockSchema = mongoose.Schema({
                         isValid = false;
                     }
                 });
-                return isValid
+                return isValid;
             }
         },
         message: "Please provide valid image URL",

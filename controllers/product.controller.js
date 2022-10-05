@@ -36,7 +36,7 @@ exports.getProducts = async (req, res, next) => {
       const fields = req.query.fields.split(',').join(' ');
       querys.fields = fields;
     }
-    
+
     if (req.query.page) {
       const { page = 1, limit = 10 } = req.query;
       const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -193,18 +193,18 @@ exports.bulkDeleteProduct = async (req, res, next) => {
 
 
 // upload file
-exports.fileUploadController = async(req, res, next) => {
+exports.fileUploadController = async (req, res, next) => {
   try {
-    
+
     res.status(200).json({
-      status:"success!",
-      message:"file upload successful",
-      data: req.file
+      status: "success!",
+      message: "file upload successful",
+      data: req.files
     })
   } catch (error) {
     res.status(400).json({
       status: "fail!",
-      message:"coudn't upload file",
+      message: "coudn't upload file",
       error: error.message
     })
   }
