@@ -13,7 +13,7 @@ const stockSchema = mongoose.Schema({
         type: String,
         required: [true, "Pleasse provide a name for this product"],
         trim: true, // for remove expra space
-        unique: [true, "Name must be unique"], // for one name one time
+        // unique: [true, "Name must be unique"], // for one name one time
         minLength: [3, "Name must be at least 3 charecters."],
         maxLength: [100, "Name is too lorge"],
     },
@@ -61,20 +61,21 @@ const stockSchema = mongoose.Schema({
     imageURLs: [{
         type: String,
         required: true,
-        validate: {
-            validator: (value) => {
-                if (!Array.isArray) {
-                    return false;
-                }
-                let isValid = true;
-                value.forEach(url => {
-                    if (!validator.isURL(url)) {
-                        isValid = false;
-                    }
-                });
-                return isValid;
-            }
-        },
+        // validate: {
+        //     validator: (value) => {
+        //         if (!Array.isArray) {
+        //             return false;
+        //         }
+        //         let isValid = true;
+        //         value.forEach(url => {
+        //             if (!validator.isURL(url)) {
+        //                 isValid = false;
+        //             }
+        //         });
+        //         return isValid;
+        //     }
+        // },
+        validate: [validator.isURL, "please provide a valid url(s)"],
         message: "Please provide valid image URL",
     }],
     category: {
@@ -115,10 +116,15 @@ const stockSchema = mongoose.Schema({
             trim: true,
             required: [true, "Please provide supplier name"],
         },
-        id:{
-            type:ObjectId,
-            ref:"Supplier"
+        id: {
+            type: ObjectId,
+            ref: "Supplier"
         }
+    },
+    sellCount: {
+        type: Number,
+        default: 0,
+        min: 0
     }
 }, {
     timestamps: true

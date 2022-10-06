@@ -1,5 +1,3 @@
-const { query } = require("express");
-const Product = require("../models/Product");
 const {
   getProductService,
   createProductService,

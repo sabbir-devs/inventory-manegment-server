@@ -13,10 +13,11 @@ const brandRoute = require("./routes/brand.route");
 const storeRoute = require("./routes/store.route")
 const categoryRoute = require('./routes/category.route');
 const suppliereRoute = require("./routes/supplier.route");
+const stockRouter = require("./routes/supplier.route");
 
 
 app.get("/", (req, res) => {
-  res.send("Hello from server");
+  res.send("server is running! chill bro🤟🤟");
 });
 
 
@@ -26,6 +27,7 @@ app.use('/api/v1/brand', brandRoute);
 app.use('/api/v1/store', storeRoute);
 app.use('/api/v1/category', categoryRoute);
 app.use('/api/v1/supplier', suppliereRoute);
+app.use('/api/v1/stock', stockRouter)
 
 
 // export app
